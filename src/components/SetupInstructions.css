@@ -185,11 +185,25 @@
   font-size: 0.875rem;
   display: flex;
   align-items: flex-start;
+  gap: 0.5rem;
   line-height: 1.5;
+}
+
+.success-icon {
+  color: var(--runestone-blue);
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+}
+
+.success-indicator span {
+  flex: 1;
 }
 
 .success-indicator strong {
   color: var(--runestone-blue);
+  font-weight: 600;
 }
 
 @media (max-width: 768px) {

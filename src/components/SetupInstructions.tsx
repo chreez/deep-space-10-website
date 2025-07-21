@@ -54,12 +54,12 @@ function SetupInstructions() {
             <div className="step-indicator">3</div>
             <h3>Launch Game</h3>
             <p>Start Valheim normally through Steam. The mods will load automatically.</p>
-            <p className="success-indicator">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{color: '#4B91E2', marginRight: '0.5rem'}}>
+            <div className="success-indicator">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" className="success-icon">
                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
               </svg>
-              A second window labeled <strong>'BepInEx'</strong> should launch, confirming successful mod installation
-            </p>
+              <span>A second window labeled <strong>'BepInEx'</strong> should launch, confirming successful mod installation</span>
+            </div>
           </div>
         </div>
       </div>
