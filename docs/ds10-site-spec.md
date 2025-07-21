@@ -55,21 +55,24 @@ This single-page site introduces players to the DS-10 Valheim modded server and 
 ### 🪐 Hero Section
 * Server Name: **DS-10**
 * Tagline: *Connect your longship to the starforge.*
-* Join Button with subtle glow effect
-* Animated background (Vanta.NET)
-* **Join button behavior**: Smooth scroll to `#server-details` section
+* Two CTA buttons with modern styling:
+  * **"Server Details"**: Smooth scroll to `#server-details` section
+  * **"Quick Start"**: Smooth scroll to `#setup-instructions` section
+* Animated background with constellation overlay
 * Full viewport height (`100vh`)
 
 ### 🧑‍🚀 Setup Instructions
 ⚠️ The first time you load Valheim it will be slow. Don't worry — you'll get through this. 🪓
 
-* **Step 1**: Download the modpack from:
+* **Step 1**: Download the modpack:
    * `https://github.com/chreez/deep-space-10-valheim/releases`
+   * Click on **deepspace10.rar** to download
    * Display as a clear hyperlink button
 * **Step 2**: Place the files into your Valheim install directory
    * Hover or click hint: "Where do I find it?"
    * Reveal: "Right click Valheim in your Steam Library → Manage → Browse local files"
 * **Step 3**: Start the game like normal
+   * A second window labeled 'BepInEx' should launch, confirming successful mod installation
 
 Each step appears as a **Meteor Gray card** with a **Runestone Blue step number**.
 
@@ -175,8 +178,9 @@ Title: **Server Details**
 
 ### ARIA Labels
 ```html
-<!-- Join Button -->
-<button aria-label="Scroll to server connection details">JOIN US</button>
+<!-- Hero Buttons -->
+<button aria-label="Scroll to server connection details">Server Details</button>
+<button aria-label="Scroll to setup instructions">Quick Start</button>
 
 <!-- IP Copy Field -->
 <button 
@@ -192,7 +196,7 @@ Title: **Server Details**
 <!-- Download Button -->
 <a 
   href="https://github.com/chreez/deep-space-10-valheim/releases"
-  aria-label="Download DS-10 modpack from GitHub (opens in new tab)"
+  aria-label="Download deepspace10.rar modpack from GitHub (opens in new tab)"
   target="_blank"
   rel="noopener noreferrer"
 >
@@ -315,23 +319,46 @@ jobs:
    * Background: Runestone Blue (`#4B91E2`), hover: Solar Flare Amber (`#D88C3D`)
    * Icon: Optional SVG download icon inline left of label
    * Padding: `0.75rem 2rem`, Radius: `8px`, white text
-* Hero section is full-screen with animated Vanta background
-* "JOIN US" button is styled, glows subtly, and scrolls to `#server-details`
-* Setup instructions are visible, clear, and consistent with design system
+* Hero section is full-screen with animated background featuring:
+   * Modern gradient mesh background
+   * Subtle animated grid overlay
+   * **Constellation visualization overlay:**
+     * Animated star points connected by subtle lines
+     * Stars use Runestone Blue (`#4B91E2`) with glow effect
+     * Lines fade in/out with 0.1-0.3 opacity
+     * Slow rotation/drift animation (30-60s full cycle)
+     * Must not interfere with text readability
+     * Responsive to viewport size
+* Hero section has two CTA buttons with modern design:
+   * **"Server Details"** button: Smooth scroll to `#server-details`
+   * **"Quick Start"** button: Smooth scroll to `#setup-instructions`
+   * Both with gradient backgrounds and hover states
+   * Shimmer effect on hover
+   * Buttons displayed side-by-side with appropriate spacing
+* Setup instructions use card-based grid layout:
+   * Responsive grid (3 columns desktop, 1 column mobile)
+   * Cards with hover lift effect
+   * Step indicators with gradient backgrounds
 * GitHub modpack link opens in new tab
+* Download instructions clearly specify to click **deepspace10.rar**
 * Hovering/clicking "Where do I find it?" reveals Steam instructions
-* IP address field copies the value to clipboard and displays "Copied!" feedback
-* When the copy occurs, a visual rune pulse animation plays around the input field:
-   * A semi-transparent circular glow radiates from the center of the input
-   * Color: Runestone Blue (`#4B91E2`) fading outward
-   * Duration: 300ms
-   * Animation must be smooth, with CSS transitions
-   * The glow should not interfere with surrounding elements or text readability
-* Password hint appears as plain text below IP input
+* **IP address field copies to clipboard with confirmation:**
+   * Displays "Copied to clipboard!" text feedback
+   * Text appears below or near the IP field
+   * Confirmation remains visible for 2-3 seconds
+* When the copy occurs, a visual pulse animation plays:
+   * Scale transform with glow effect
+   * Color transition to Solar Flare Amber during animation
+   * Duration: 500ms with cubic-bezier easing
+   * Animation must be smooth and modern
+* Password hint appears in styled container below IP input
+* Step 3 includes BepInEx confirmation text:
+   * States "A second window labeled 'BepInEx' should launch, confirming successful mod installation"
 * Layout is responsive and readable on mobile and desktop
 * All interactive elements have proper ARIA labels and keyboard support
 * Clipboard fallback mechanism works in older browsers
 * All colors, spacing, and typography match defined design system
+* Modern gaming aesthetic throughout with smooth micro-interactions
 
 ## 🧪 Testing Criteria
 
@@ -344,7 +371,7 @@ Create and run a Playwright test suite that:
 5. Ensures font family `Orbitron` is applied to hero title
 6. Screenshots the layout at viewport widths: `375px`, `768px`, `1280px`
 7. Compares layout and colors to approved baseline snapshots
-8. Tests smooth scroll behavior from JOIN US button to server details
+8. Tests smooth scroll behavior from hero buttons to respective sections
 9. Verifies clipboard functionality and tooltip appearance
 10. Confirms keyboard navigation works correctly
 11. Validates ARIA labels announce correctly
