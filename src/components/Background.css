@@ -1,0 +1,42 @@
+.modern-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(75, 145, 226, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(216, 140, 61, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 40% 20%, rgba(75, 145, 226, 0.05) 0%, transparent 50%),
+    var(--deep-space-black);
+  z-index: -3;
+}
+
+.grid-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    linear-gradient(rgba(199, 204, 214, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(199, 204, 214, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  z-index: -2;
+  animation: grid-slide 20s linear infinite;
+}
+
+@keyframes grid-slide {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(50px, 50px); }
+}
+
+.constellation-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}

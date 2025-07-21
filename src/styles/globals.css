@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --deep-space-black: #0B0C10;
+  --meteor-gray: #1F1F23;
+  --moonstone-steel: #C7CCD6;
+  --runestone-blue: #4B91E2;
+  --solar-flare-amber: #D88C3D;
+  --blood-mead-red: #9E2B25;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--deep-space-black);
+  color: var(--moonstone-steel);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
