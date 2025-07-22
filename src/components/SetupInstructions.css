@@ -39,6 +39,25 @@
   }
 }
 
+.section.revealing {
+  animation: revealSection 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes revealSection {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateY(10px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .card-grid {
   display: grid;
   gap: 1.5rem;
@@ -377,6 +396,40 @@ code {
   border-radius: 4px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
+}
+
+.download-wait-hint {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: rgba(75, 145, 226, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(75, 145, 226, 0.2);
+  text-align: center;
+}
+
+.download-wait-hint p {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--moonstone-steel);
+  opacity: 0.9;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--runestone-blue);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  padding: 0.25rem 0.5rem;
+}
+
+.link-button:hover {
+  color: var(--solar-flare-amber);
+  transform: translateX(3px);
 }
 
 @media (max-width: 768px) {
