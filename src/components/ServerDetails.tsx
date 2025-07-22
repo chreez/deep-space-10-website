@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { copyToClipboard } from '../utils/clipboard'
 import DerekKnowledgeTest from './DerekKnowledgeTest'
 import './ServerDetails.css'
@@ -8,6 +8,7 @@ function ServerDetails() {
   const [isCopying, setIsCopying] = useState(false)
   const [quizCompleted, setQuizCompleted] = useState(false)
   const [derekMessage, setDerekMessage] = useState<string | null>(null)
+  const ipButtonRef = useRef<HTMLButtonElement>(null)
 
   // Check localStorage on mount
   useEffect(() => {
@@ -20,6 +21,10 @@ function ServerDetails() {
         const derekImage = document.querySelector('img[alt="Derek"]') as HTMLImageElement
         if (derekImage) {
           derekImage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+        if (ipButtonRef.current) {
+          // Keep scroll position when focusing the IP button
+          ipButtonRef.current.focus({ preventScroll: true } as any)
         }
       }, 100)
     }
@@ -44,11 +49,13 @@ function ServerDetails() {
       
       // Random copy messages for server address
       const serverCopyMessages = [
-        "Nice copy bro",
-        "Server secured, captain!",
-        "You got the coords!"
-      ];
-      const randomMessage = serverCopyMessages[Math.floor(Math.random() * serverCopyMessages.length)];
+        'Nice copy bro',
+        'Server secured, captain!',
+        'You got the coords!'
+      ]
+      const randomMessage = serverCopyMessages[
+        Math.floor(Math.random() * serverCopyMessages.length)
+      ]
       setDerekMessage(randomMessage)
       
       // Haptic feedback for mobile
@@ -78,7 +85,8 @@ function ServerDetails() {
         <div className="server-panel">
           <div className="ip-container">
             <div className="ip-label">Server Address</div>
-            <button 
+            <button
+              ref={ipButtonRef}
               className={`modern-ip-field ${isCopying ? 'copied' : ''} ${!quizCompleted ? 'redacted' : ''}`}
               onClick={handleCopyIP}
               aria-label={quizCompleted ? "Copy server IP address to clipboard" : "Complete Derek's quiz to reveal server address"}
