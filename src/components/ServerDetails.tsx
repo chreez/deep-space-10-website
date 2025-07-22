@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { copyToClipboard } from '../utils/clipboard'
 import DerekKnowledgeTest from './DerekKnowledgeTest'
 import './ServerDetails.css'
@@ -6,8 +6,25 @@ import './ServerDetails.css'
 function ServerDetails() {
   const [showTooltip, setShowTooltip] = useState(false)
   const [isCopying, setIsCopying] = useState(false)
+  const [quizCompleted, setQuizCompleted] = useState(false)
+
+  // Check localStorage on mount
+  useEffect(() => {
+    const completed = localStorage.getItem('derekQuizCompleted') === 'true'
+    setQuizCompleted(completed)
+  }, [])
+
+  const handleQuizCompleted = () => {
+    setQuizCompleted(true)
+    localStorage.setItem('derekQuizCompleted', 'true')
+  }
 
   const handleCopyIP = async () => {
+    // Only allow copying if quiz is completed
+    if (!quizCompleted) {
+      return
+    }
+    
     const success = await copyToClipboard('95.173.217.154:2456')
     
     if (success) {
@@ -37,13 +54,17 @@ function ServerDetails() {
           <div className="ip-container">
             <div className="ip-label">Server Address</div>
             <button 
-              className={`modern-ip-field ${isCopying ? 'copied' : ''}`}
+              className={`modern-ip-field ${isCopying ? 'copied' : ''} ${!quizCompleted ? 'redacted' : ''}`}
               onClick={handleCopyIP}
-              aria-label="Copy server IP address to clipboard"
+              aria-label={quizCompleted ? "Copy server IP address to clipboard" : "Complete Derek's quiz to reveal server address"}
               aria-live="polite"
               aria-atomic="true"
+              disabled={!quizCompleted}
             >
-              <span>95.173.217.154:2456</span>
+              <span>{quizCompleted ? '95.173.217.154:2456' : 'REDACTED'}</span>
+              {!quizCompleted && (
+                <div className="redacted-hint">Complete Derek's quiz to reveal</div>
+              )}
               <div className={`modern-tooltip ${showTooltip ? 'show' : ''}`}>
                 Copied to clipboard!
               </div>
@@ -55,7 +76,7 @@ function ServerDetails() {
             <p>Derek's favorite animal</p>
           </div>
           
-          <DerekKnowledgeTest />
+          <DerekKnowledgeTest onQuizCompleted={handleQuizCompleted} />
         </div>
       </div>
     </section>

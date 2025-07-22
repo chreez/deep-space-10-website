@@ -12,7 +12,11 @@ const extendedStyles = styles as typeof styles & {
   successAnswer: string;
 };
 
-const DerekKnowledgeTest: React.FC = () => {
+interface DerekKnowledgeTestProps {
+  onQuizCompleted?: () => void;
+}
+
+const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [answer, setAnswer] = useState('');
   const [message, setMessage] = useState('');
@@ -23,6 +27,15 @@ const DerekKnowledgeTest: React.FC = () => {
   const [showInput, setShowInput] = useState(false);
   const [inputAnimating, setInputAnimating] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Check if quiz was already completed on mount
+  useEffect(() => {
+    const completed = localStorage.getItem('derekQuizCompleted') === 'true';
+    if (completed) {
+      setIsSuccess(true);
+      setMessage("You really know me, bro.");
+    }
+  }, []);
 
   const incorrectMessages = [
     "That's not my spirit animal, man.",
@@ -44,6 +57,11 @@ const DerekKnowledgeTest: React.FC = () => {
       setShowMessage(false);
       setIsSuccess(true);
       setDerekAnimation(extendedStyles.celebrate);
+      
+      // Call the completion callback
+      if (onQuizCompleted) {
+        onQuizCompleted();
+      }
       
       // Scroll to Derek image for correct answer
       const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
@@ -232,14 +250,16 @@ const DerekKnowledgeTest: React.FC = () => {
 
   return (
     <div className={styles.container}>
-      <button 
-        className={styles.toggleButton}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        aria-controls="derek-form"
-      >
-        Test Your Derek Knowledge 🧠
-      </button>
+      {!isOpen && (
+        <button 
+          className={styles.toggleButton}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-expanded={isOpen}
+          aria-controls="derek-form"
+        >
+          Test Your Derek Knowledge 🧠
+        </button>
+      )}
       
       {isOpen && (
         <div id="derek-form" className={styles.formContainer}>

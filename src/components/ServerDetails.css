@@ -117,6 +117,68 @@
   color: white;
 }
 
+/* Redacted IP Address Styles */
+.modern-ip-field.redacted {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.modern-ip-field.redacted span {
+  filter: blur(8px);
+  letter-spacing: 0.3em;
+  font-weight: bold;
+  color: var(--solar-flare-amber);
+  text-shadow: 0 0 20px rgba(216, 140, 61, 0.5);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-ip-field.redacted:hover {
+  transform: none;
+  background: rgba(216, 140, 61, 0.05);
+  border-color: rgba(216, 140, 61, 0.5);
+}
+
+.modern-ip-field.redacted::after {
+  content: '🔒';
+  opacity: 0.7;
+}
+
+.redacted-hint {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.75rem;
+  color: var(--solar-flare-amber);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+/* Reveal animation when quiz is completed */
+.modern-ip-field:not(.redacted) span {
+  animation: reveal-ip 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes reveal-ip {
+  0% {
+    filter: blur(8px);
+    letter-spacing: 0.3em;
+    opacity: 0;
+  }
+  50% {
+    filter: blur(4px);
+    letter-spacing: 0.15em;
+    opacity: 0.5;
+  }
+  100% {
+    filter: blur(0);
+    letter-spacing: normal;
+    opacity: 1;
+  }
+}
+
 @media (max-width: 768px) {
   .server-panel {
     padding: 2rem;
@@ -124,5 +186,10 @@
   
   .modern-ip-field {
     font-size: 1rem;
+  }
+  
+  .redacted-hint {
+    font-size: 0.7rem;
+    bottom: -25px;
   }
 }
