@@ -192,30 +192,77 @@
 }
 
 .successAnswer {
-  display: inline-block;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, #2a2a2e, #3a3a3e);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: rgba(42, 42, 46, 0.9);
   border: 2px solid #FFD700;
   border-radius: 8px;
   color: #FFD700;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 600;
   text-align: center;
   box-shadow: 0 0 20px rgba(255, 215, 0, 0.3),
               inset 0 0 15px rgba(255, 215, 0, 0.1);
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-  animation: successGlow 2s ease-in-out infinite;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  width: 100%;
+  font-family: 'Inter', sans-serif;
 }
 
-@keyframes successGlow {
+.successAnswer:hover {
+  background: rgba(255, 215, 0, 0.05);
+  box-shadow: 0 0 25px rgba(255, 215, 0, 0.4),
+              inset 0 0 15px rgba(255, 215, 0, 0.15);
+}
+
+.successAnswer:active {
+  transform: scale(0.98);
+}
+
+.successAnswer span {
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.successAnswer.copied {
+  animation: copy-success-gold 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes copy-success-gold {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3),
-                inset 0 0 15px rgba(255, 215, 0, 0.1);
+    transform: scale(1);
   }
   50% {
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5),
-                inset 0 0 20px rgba(255, 215, 0, 0.2);
+    transform: scale(1.02);
+    background: rgba(255, 215, 0, 0.1);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
   }
+}
+
+.passwordTooltip {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1F1F23;
+  color: #FFD700;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #FFD700;
+  white-space: nowrap;
+}
+
+.passwordTooltip.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(10px);
 }
 
 .derekContainer {
@@ -475,10 +522,11 @@
   border-radius: 12px;
   padding: 1rem 1.5rem;
   max-width: 250px;
-  animation: popIn 0.3s ease-out;
+  animation: popIn 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow: 0 0 20px rgba(75, 145, 226, 0.3),
               inset 0 0 20px rgba(75, 145, 226, 0.1);
   position: relative;
+  transition: opacity 0.2s ease-out, transform 0.2s ease-out;
 }
 
 .speechBubble::before {
@@ -571,11 +619,98 @@
 @keyframes popIn {
   from {
     opacity: 0;
-    transform: translateY(-50%) scale(0.8);
+    transform: translateY(-50%) scale(0.6) translateX(20px);
   }
   to {
     opacity: 1;
-    transform: translateY(-50%) scale(1);
+    transform: translateY(-50%) scale(1) translateX(0);
+  }
+}
+
+.speechBubble.hiding {
+  opacity: 0;
+  transform: translateY(-50%) scale(0.8) translateX(10px);
+}
+
+.niceCopyShake {
+  animation: happyShake 0.6s ease-out;
+}
+
+@keyframes happyShake {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-8deg) scale(1.05);
+  }
+  20% {
+    transform: rotate(8deg) scale(1.05);
+  }
+  30% {
+    transform: rotate(-8deg) scale(1.05);
+  }
+  40% {
+    transform: rotate(8deg) scale(1.05);
+  }
+  50% {
+    transform: rotate(-5deg) scale(1.03);
+  }
+  60% {
+    transform: rotate(5deg) scale(1.03);
+  }
+  70% {
+    transform: rotate(-3deg) scale(1.01);
+  }
+  80% {
+    transform: rotate(3deg) scale(1.01);
+  }
+  90% {
+    transform: rotate(-1deg) scale(1);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+/* Success animations */
+.successLayout {
+  animation: reorderLayout 0.8s ease-out forwards;
+}
+
+@keyframes reorderLayout {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.formSuccess {
+  animation: slideUp 0.8s ease-out forwards;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-100px);
+  }
+}
+
+.derekSlideDown {
+  animation: slideDown 0.8s ease-out forwards;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-300px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
   }
 }
 

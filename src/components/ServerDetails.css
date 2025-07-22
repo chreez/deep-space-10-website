@@ -103,18 +103,24 @@
   transform: translateX(-50%) translateY(10px);
 }
 
-.password-hint {
-  margin-top: 2rem;
-  padding: 1.5rem;
-  background: rgba(216, 140, 61, 0.1);
-  border-radius: 12px;
-  border: 1px solid rgba(216, 140, 61, 0.3);
+.password-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  position: relative;
 }
 
-.password-hint p {
-  font-size: 1.125rem;
-  margin-top: 0.5rem;
-  color: white;
+.modern-ip-field.static {
+  cursor: default;
+  pointer-events: none;
+}
+
+.modern-ip-field.static:hover {
+  transform: none;
+  background: rgba(42, 42, 46, 0.9);
+}
+
+.modern-ip-field.static::after {
+  display: none;
 }
 
 /* Redacted IP Address Styles */

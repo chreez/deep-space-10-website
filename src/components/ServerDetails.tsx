@@ -7,11 +7,22 @@ function ServerDetails() {
   const [showTooltip, setShowTooltip] = useState(false)
   const [isCopying, setIsCopying] = useState(false)
   const [quizCompleted, setQuizCompleted] = useState(false)
+  const [derekMessage, setDerekMessage] = useState<string | null>(null)
 
   // Check localStorage on mount
   useEffect(() => {
     const completed = localStorage.getItem('derekQuizCompleted') === 'true'
     setQuizCompleted(completed)
+    
+    // Scroll to Derek image if quiz is completed
+    if (completed) {
+      setTimeout(() => {
+        const derekImage = document.querySelector('img[alt="Derek"]') as HTMLImageElement
+        if (derekImage) {
+          derekImage.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }
+      }, 100)
+    }
   }, [])
 
   const handleQuizCompleted = () => {
@@ -31,6 +42,15 @@ function ServerDetails() {
       setIsCopying(true)
       setShowTooltip(true)
       
+      // Random copy messages for server address
+      const serverCopyMessages = [
+        "Nice copy bro",
+        "Server secured, captain!",
+        "You got the coords!"
+      ];
+      const randomMessage = serverCopyMessages[Math.floor(Math.random() * serverCopyMessages.length)];
+      setDerekMessage(randomMessage)
+      
       // Haptic feedback for mobile
       if ('vibrate' in navigator) {
         navigator.vibrate(50)
@@ -43,6 +63,11 @@ function ServerDetails() {
       setTimeout(() => {
         setShowTooltip(false)
       }, 2000)
+      
+      // Clear Derek's message after 3 seconds
+      setTimeout(() => {
+        setDerekMessage(null)
+      }, 3000)
     }
   }
 
@@ -71,14 +96,10 @@ function ServerDetails() {
             </button>
           </div>
           
-          {!quizCompleted && (
-            <div className="password-hint">
-              <div className="ip-label">Password Hint</div>
-              <p>Derek's favorite animal</p>
-            </div>
-          )}
-          
-          <DerekKnowledgeTest onQuizCompleted={handleQuizCompleted} />
+          <div className="password-container">
+            <div className="ip-label">Password</div>
+            <DerekKnowledgeTest onQuizCompleted={handleQuizCompleted} externalMessage={derekMessage} />
+          </div>
         </div>
       </div>
     </section>

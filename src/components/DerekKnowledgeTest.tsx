@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { copyToClipboard } from '../utils/clipboard';
 import styles from '../styles/modules/DerekKnowledgeTest.module.css';
 
 // Extend the styles type to include our new animation classes
@@ -14,9 +15,10 @@ const extendedStyles = styles as typeof styles & {
 
 interface DerekKnowledgeTestProps {
   onQuizCompleted?: () => void;
+  externalMessage?: string | null;
 }
 
-const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted }) => {
+const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted, externalMessage }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [answer, setAnswer] = useState('');
   const [message, setMessage] = useState('');
@@ -26,6 +28,10 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
   const [isSuccess, setIsSuccess] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const [inputAnimating, setInputAnimating] = useState(false);
+  const [successAnimating, setSuccessAnimating] = useState(false);
+  const [passwordCopying, setPasswordCopying] = useState(false);
+  const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
+  const [messageFading, setMessageFading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   
   // Check if quiz was already completed on mount
@@ -34,6 +40,9 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
     if (completed) {
       setIsSuccess(true);
       setMessage("You really know me, bro.");
+      setIsOpen(true);
+      setShowInput(true);
+      setShowMessage(true);
     }
   }, []);
 
@@ -56,12 +65,18 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
       setMessage("You really know me, bro.");
       setShowMessage(false);
       setIsSuccess(true);
+      setSuccessAnimating(true);
       setDerekAnimation(extendedStyles.celebrate);
       
       // Call the completion callback
       if (onQuizCompleted) {
         onQuizCompleted();
       }
+      
+      // Stop animating after slide completes
+      setTimeout(() => {
+        setSuccessAnimating(false);
+      }, 800);
       
       // Scroll to Derek image for correct answer
       const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
@@ -146,7 +161,8 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isSuccess) {
+      // Only do animations if quiz is not already completed
       // Immediate scroll to Derek when form opens
       const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
       if (derekImage) {
@@ -193,11 +209,38 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
         clearTimeout(scrollTimer);
         clearTimeout(inputTimer);
       };
-    } else {
+    } else if (!isOpen) {
       setShowInput(false);
       setInputAnimating(false);
     }
-  }, [isOpen]);
+  }, [isOpen, isSuccess]);
+
+  // Handle external messages
+  useEffect(() => {
+    if (externalMessage && isSuccess) {
+      setMessage(externalMessage);
+      setShowMessage(true);
+      
+      // Add shake animation for all copy messages
+      setDerekAnimation((styles as any).niceCopyShake);
+      
+      // Remove animation after it completes
+      setTimeout(() => {
+        setDerekAnimation('');
+      }, 600);
+      
+      // Hide message after 3 seconds
+      const timer = setTimeout(() => {
+        setMessageFading(true);
+        setTimeout(() => {
+          setShowMessage(false);
+          setMessageFading(false);
+        }, 200);
+      }, 3000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [externalMessage, isSuccess]);
 
   // Maintain focus on input whenever component updates
   useEffect(() => {
@@ -262,36 +305,93 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
       )}
       
       {isOpen && (
-        <div id="derek-form" className={styles.formContainer}>
-
-          <div className={styles.derekContainer}>
-            <img 
-              src="/derek.png" 
-              alt="Derek" 
-              className={`${styles.derekImage} ${(styles as any).derekEntry} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
-              onClick={handleDerekClick}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  handleDerekClick();
-                }
-              }}
-            />
-            {showMessage && (
-              <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''}`}>
-                <p>{message}</p>
-              </div>
-            )}
-          </div>
-          {showInput && (
-            <form onSubmit={handleSubmit} className={`${styles.form} ${(styles as any).formEntry}`}>
+        <div id="derek-form" className={`${styles.formContainer} ${successAnimating ? (styles as any).successLayout : ''}`}>
+          {!isSuccess && (
+            <div className={styles.derekContainer}>
+              <img 
+                src="/derek.png" 
+                alt="Derek" 
+                className={`${styles.derekImage} ${!isSuccess ? (styles as any).derekEntry : ''} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
+                onClick={handleDerekClick}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleDerekClick();
+                  }
+                }}
+              />
+              {showMessage && (
+                <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''} ${messageFading ? (styles as any).hiding : ''}`}>
+                  <p>{message}</p>
+                </div>
+              )}
+            </div>
+          )}
+          
+          {(showInput || isSuccess) && (
+            <form onSubmit={handleSubmit} className={`${styles.form} ${!isSuccess ? (styles as any).formEntry : ''} ${successAnimating ? (styles as any).formSuccess : ''}`}>
               <div className={styles.inputGroup}>
-                <label htmlFor="derek-answer" className={styles.label}>
-                  What's Derek's favorite animal?
-                </label>
+                {!isSuccess && (
+                  <label htmlFor="derek-answer" className={styles.label}>
+                    What's Derek's favorite animal?
+                  </label>
+                )}
                 {isSuccess ? (
-                  <span className={(styles as any).successAnswer}>dragon</span>
+                  <button
+                    type="button"
+                    className={`${(styles as any).successAnswer} ${passwordCopying ? (styles as any).copied : ''}`}
+                    onClick={async () => {
+                      const success = await copyToClipboard('dragon');
+                      if (success) {
+                        setPasswordCopying(true);
+                        setShowPasswordTooltip(true);
+                        
+                        // Random copy messages
+                        const copyMessages = [
+                          "Smooth moves, bro",
+                          "That's my password, dude!",
+                          "Copy master right here"
+                        ];
+                        const randomMessage = copyMessages[Math.floor(Math.random() * copyMessages.length)];
+                        setMessage(randomMessage);
+                        setShowMessage(true);
+                        
+                        // Add shake animation
+                        setDerekAnimation((styles as any).niceCopyShake);
+                        
+                        if ('vibrate' in navigator) {
+                          navigator.vibrate(30);
+                        }
+                        
+                        setTimeout(() => {
+                          setPasswordCopying(false);
+                        }, 300);
+                        
+                        setTimeout(() => {
+                          setDerekAnimation('');
+                        }, 600);
+                        
+                        setTimeout(() => {
+                          setShowPasswordTooltip(false);
+                        }, 1500);
+                        
+                        setTimeout(() => {
+                          setMessageFading(true);
+                          setTimeout(() => {
+                            setShowMessage(false);
+                            setMessageFading(false);
+                          }, 200);
+                        }, 2500);
+                      }
+                    }}
+                    aria-label="Copy password to clipboard"
+                  >
+                    <span>dragon</span>
+                    <div className={`${(styles as any).passwordTooltip} ${showPasswordTooltip ? (styles as any).show : ''}`}>
+                      Copied to clipboard!
+                    </div>
+                  </button>
                 ) : (
                   <input
                     ref={(el) => {
@@ -320,9 +420,11 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
                     }}
                   />
                 )}
-                <p id="derek-hint" className={styles.hint}>
-                  Hint: Think mythical and powerful...
-                </p>
+                {!isSuccess && (
+                  <p id="derek-hint" className={styles.hint}>
+                    Hint: Think mythical and powerful...
+                  </p>
+                )}
               </div>
               {!isSuccess && (
                 <button
@@ -336,6 +438,28 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
             </form>
           )}
           
+          {isSuccess && (
+            <div className={`${styles.derekContainer} ${successAnimating ? (styles as any).derekSlideDown : ''}`}>
+              <img 
+                src="/derek.png" 
+                alt="Derek" 
+                className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
+                onClick={handleDerekClick}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleDerekClick();
+                  }
+                }}
+              />
+              {showMessage && (
+                <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''} ${messageFading ? (styles as any).hiding : ''}`}>
+                  <p>{message}</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
