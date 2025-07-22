@@ -1,6 +1,7 @@
 import './Hero.css'
 
 function Hero() {
+
   const scrollToServerDetails = () => {
     document.getElementById('server-details')?.scrollIntoView({ behavior: 'smooth' })
   }

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { copyToClipboard } from '../utils/clipboard';
-import { scrollToInstallFiles } from '../utils/scroll';
 import styles from '../styles/modules/DerekKnowledgeTest.module.css';
 
 // Extend the styles type to include our new animation classes
@@ -467,7 +466,9 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
               <div className={extendedStyles.nextStepContainer}>
                 <button 
                   className={extendedStyles.installGuideButton}
-                  onClick={scrollToInstallFiles}
+                  onClick={() => {
+                    document.getElementById('setup-instructions')?.scrollIntoView({ behavior: 'smooth' })
+                  }}
                   aria-label="Scroll to installation instructions"
                 >
                   <span>Next: Install the Mods</span>
