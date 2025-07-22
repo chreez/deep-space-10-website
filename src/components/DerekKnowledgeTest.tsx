@@ -83,7 +83,16 @@ const DerekKnowledgeTest: React.FC = () => {
                 What's Derek's favorite animal?
               </label>
               <input
-                ref={inputRef}
+                ref={(el) => {
+                  inputRef.current = el;
+                  // Scroll into view when the input is rendered
+                  if (el) {
+                    el.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'center'
+                    });
+                  }
+                }}
                 id="derek-answer"
                 type="text"
                 value={answer}
