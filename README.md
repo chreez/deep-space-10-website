@@ -118,10 +118,10 @@ The site supports URL parameters for direct section navigation:
 - `?section=server` or `?section=3` - Server connection details
 - `?section=password` - Server password section
 
-Example: `https://yoursite.com/?section=server`
+Example: `https://deep-space-10.netlify.app/?section=server`
 
 ## 🔗 Links
 
-- **Live Site**: [Coming Soon]
+- **Live Site**: [https://deep-space-10.netlify.app/](https://deep-space-10.netlify.app/)
 - **Modpack**: [DS-10 Valheim Releases](https://github.com/chreez/deep-space-10-valheim/releases) 
 - **Design Spec**: [View Spec](./docs/ds10-site-spec.md)
