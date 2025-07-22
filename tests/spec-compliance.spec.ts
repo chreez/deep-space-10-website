@@ -28,7 +28,7 @@ test.describe('DS-10 Site Spec Compliance', () => {
 
   test('Hero buttons have correct styling and behavior', async ({ page }) => {
     const serverDetailsBtn = page.locator('button:has-text("Server Details")');
-    const quickStartBtn = page.locator('button:has-text("Quick Start")');
+    const quickStartBtn = page.locator('button:has-text("Install")');
     
     await expect(serverDetailsBtn).toBeVisible();
     await expect(quickStartBtn).toBeVisible();
@@ -43,7 +43,7 @@ test.describe('DS-10 Site Spec Compliance', () => {
     await page.evaluate(() => window.scrollTo(0, 0));
     await page.waitForTimeout(500);
     
-    // Test Quick Start button scroll
+    // Test Install button scroll
     await quickStartBtn.click();
     await page.waitForTimeout(1000);
     const setupSection = page.locator('#setup-instructions');
@@ -71,7 +71,7 @@ test.describe('DS-10 Site Spec Compliance', () => {
   });
 
   test('install folder hint reveals on click', async ({ page }) => {
-    const hintButton = page.locator('button:has-text("Where\'s my install folder")');
+    const hintButton = page.locator('button:has-text("Where do I find it?")');
     const hintBox = page.locator('.hint-box');
     
     // Initially hidden
@@ -147,7 +147,7 @@ test.describe('DS-10 Site Spec Compliance', () => {
   test('all interactive elements have proper ARIA labels', async ({ page }) => {
     // Hero buttons
     const serverDetailsBtn = page.locator('button:has-text("Server Details")');
-    const quickStartBtn = page.locator('button:has-text("Quick Start")');
+    const quickStartBtn = page.locator('button:has-text("Install")');
     await expect(serverDetailsBtn).toHaveAttribute('aria-label', 'Scroll to server connection details');
     await expect(quickStartBtn).toHaveAttribute('aria-label', 'Scroll to setup instructions');
     
@@ -170,7 +170,7 @@ test.describe('DS-10 Site Spec Compliance', () => {
     
     // Tab to next button
     await page.keyboard.press('Tab');
-    const quickStartBtn = page.locator('button:has-text("Quick Start")');
+    const quickStartBtn = page.locator('button:has-text("Install")');
     await expect(quickStartBtn).toBeFocused();
   });
 

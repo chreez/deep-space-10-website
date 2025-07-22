@@ -492,11 +492,15 @@
                     <div class="step-indicator">2</div>
                     <h3 style="margin-bottom: 1rem;">Install Files</h3>
                     <p style="margin-bottom: 1rem; opacity: 0.8;">Drop the files into your Valheim directory.</p>
-                    <span class="hover-hint" 
-                          onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'">
-                        Where's my install folder
+                    <span class="hover-hint"
+                          onclick="this.nextElementSibling.style.display = this.nextElementSibling.style.display === 'block' ? 'none' : 'block'"
+                          onmouseenter="this.nextElementSibling.style.display = 'block'"
+                          onfocus="this.nextElementSibling.style.display = 'block'"
+                          onmouseleave="this.nextElementSibling.style.display = 'none'"
+                          onblur="this.nextElementSibling.style.display = 'none'">
+                        Where do I find it?
                     </span>
-                    <div style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(75, 145, 226, 0.1); border-radius: 8px; font-size: 0.875rem;">
+                    <div id="install-hint" style="display: none; margin-top: 1rem; padding: 1rem; background: rgba(75, 145, 226, 0.1); border-radius: 8px; font-size: 0.875rem;">
                         Right click Valheim in Steam → Manage → Browse local files
                     </div>
                 </div>

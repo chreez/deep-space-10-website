@@ -4,6 +4,10 @@ import './SetupInstructions.css'
 function SetupInstructions() {
   const [showInstallHint, setShowInstallHint] = useState(false)
 
+  const showHint = () => setShowInstallHint(true)
+  const hideHint = () => setShowInstallHint(false)
+  const toggleHint = () => setShowInstallHint(!showInstallHint)
+
   return (
     <section className="section setup-section" id="setup-instructions">
       <div className="container">
@@ -36,15 +40,20 @@ function SetupInstructions() {
             <div className="step-indicator">2</div>
             <h3>Install Files</h3>
             <p>Drop the files into your Valheim directory.</p>
-            <button 
-              className="hover-hint" 
-              onClick={() => setShowInstallHint(!showInstallHint)}
+            <button
+              className="hover-hint"
+              onClick={toggleHint}
+              onMouseEnter={showHint}
+              onFocus={showHint}
+              onMouseLeave={hideHint}
+              onBlur={hideHint}
               aria-expanded={showInstallHint}
+              aria-controls="install-hint"
             >
-              Where's my install folder
+              Where do I find it?
             </button>
             {showInstallHint && (
-              <div className="hint-box">
+              <div className="hint-box" id="install-hint">
                 Right click Valheim in Steam → Manage → Browse local files
               </div>
             )}
