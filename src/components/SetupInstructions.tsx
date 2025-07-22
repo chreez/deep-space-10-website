@@ -7,9 +7,9 @@ function SetupInstructions() {
   return (
     <section className="section setup-section" id="setup-instructions">
       <div className="container">
-        <h2>Quick Setup</h2>
+        <h2>Install</h2>
         <p className="section-subtitle">
-          ⚠️ First launch will take a moment. Hang tight, Viking! 🪓
+          ⚠️ Initial launch will take a moment. Hang tight, Viking! 🪓
         </p>
         
         <div className="card-grid">
