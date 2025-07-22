@@ -102,12 +102,9 @@ const DerekKnowledgeTest: React.FC = () => {
                 aria-describedby="derek-hint"
               />
               <p id="derek-hint" className={styles.hint}>
-                Hint: Think mythical and powerful...
+                Hint: Think mythical and powerful... Press Enter to submit.
               </p>
             </div>
-            <button type="submit" className={styles.submitButton}>
-              Submit
-            </button>
           </form>
           
           <div className={styles.derekContainer}>
