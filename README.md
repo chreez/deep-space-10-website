@@ -8,6 +8,8 @@ A modern, responsive splash page for the DS-10 modded Valheim server, featuring 
 - **Dual Navigation**: Hero section with "Server Details" and "Quick Start" CTAs
 - **Step-by-Step Setup Guide**: Clear instructions for mod installation with visual indicators
 - **Server Connection Info**: One-click IP copying with visual feedback
+- **Deep Linking Support**: Direct links to specific sections via URL parameters
+- **Smart Navigation**: QuickNav appears on scroll, server hints during downloads
 - **Fully Responsive**: Optimized for desktop, tablet, and mobile devices
 - **Accessibility First**: WCAG 2.1 AA compliant with full keyboard navigation
 
@@ -70,7 +72,10 @@ The site is configured for automatic deployment on Netlify:
 │   │   ├── Hero.tsx     # Hero section with dual CTAs
 │   │   ├── SetupInstructions.tsx
 │   │   ├── ServerDetails.tsx
+│   │   ├── QuickNav.tsx # Floating navigation
 │   │   └── Background.tsx # Constellation animation
+│   ├── hooks/           # Custom React hooks
+│   │   └── usePermalink.ts # URL-based navigation
 │   ├── styles/          # Global styles
 │   └── utils/           # Utility functions
 ├── tests/               # Playwright E2E tests
@@ -104,8 +109,19 @@ The site is configured for automatic deployment on Netlify:
 
 This project is licensed under the ISC License.
 
+## 📍 Deep Linking
+
+The site supports URL parameters for direct section navigation:
+
+- `?section=install` or `?section=1` - Installation instructions
+- `?section=install-files` or `?section=2` - File installation step
+- `?section=server` or `?section=3` - Server connection details
+- `?section=password` - Server password section
+
+Example: `https://yoursite.com/?section=server`
+
 ## 🔗 Links
 
 - **Live Site**: [Coming Soon]
-- **Modpack**: [DS-10 Valheim Releases](https://github.com/chreez/deep-space-10-valheim/releases)
+- **Modpack**: [DS-10 Valheim Releases](https://github.com/chreez/deep-space-10-valheim/releases) 
 - **Design Spec**: [View Spec](./docs/ds10-site-spec.md)
