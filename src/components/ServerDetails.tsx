@@ -71,10 +71,12 @@ function ServerDetails() {
             </button>
           </div>
           
-          <div className="password-hint">
-            <div className="ip-label">Password Hint</div>
-            <p>Derek's favorite animal</p>
-          </div>
+          {!quizCompleted && (
+            <div className="password-hint">
+              <div className="ip-label">Password Hint</div>
+              <p>Derek's favorite animal</p>
+            </div>
+          )}
           
           <DerekKnowledgeTest onQuizCompleted={handleQuizCompleted} />
         </div>
