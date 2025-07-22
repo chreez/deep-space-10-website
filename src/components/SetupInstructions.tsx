@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './SetupInstructions.css'
+import GameDirectoryTree from './GameDirectoryTree'
 
 function SetupInstructions() {
   const [showInstallHint, setShowInstallHint] = useState(false)
@@ -62,6 +63,7 @@ function SetupInstructions() {
             </div>
           </div>
         </div>
+        <GameDirectoryTree />
       </div>
     </section>
   )
