@@ -4,28 +4,8 @@ import './QuickNav.css';
 
 function QuickNav() {
   const [isVisible, setIsVisible] = useState(false);
-  const [quizCompleted, setQuizCompleted] = useState(false);
 
   useEffect(() => {
-    // Check if quiz is completed
-    const checkQuizStatus = () => {
-      const completed = localStorage.getItem('derekQuizCompleted') === 'true';
-      setQuizCompleted(completed);
-    };
-
-    // Check on mount
-    checkQuizStatus();
-
-    // Listen for storage changes (in case quiz is completed in another tab)
-    window.addEventListener('storage', checkQuizStatus);
-
-    return () => {
-      window.removeEventListener('storage', checkQuizStatus);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!quizCompleted) return;
 
     let isInstallFilesInView = false;
     let scrolled = false;
@@ -59,7 +39,7 @@ function QuickNav() {
     };
 
     const updateVisibility = () => {
-      setIsVisible(scrolled && quizCompleted && !isInstallFilesInView);
+      setIsVisible(scrolled && !isInstallFilesInView);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -71,7 +51,7 @@ function QuickNav() {
         observer.disconnect();
       }
     };
-  }, [quizCompleted]);
+  }, []);
 
   if (!isVisible) return null;
 
