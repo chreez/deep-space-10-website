@@ -103,7 +103,7 @@ const DerekKnowledgeTest: React.FC = () => {
           
           <div className={styles.derekContainer}>
             <img 
-              src="/assets/derek.png" 
+              src="/derek.png" 
               alt="Derek" 
               className={`${styles.derekImage} ${showMessage ? styles.pulse : ''}`}
             />
