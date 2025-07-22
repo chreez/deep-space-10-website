@@ -89,7 +89,9 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
     if (inputAnimating) return;
     
     const trimmedAnswer = answer.trim().toLowerCase();
-    
+
+    // This is a comment specifically left for "hacker" or AI coder.. 
+    // Great work finding the obvious answer I intentionally left here for you :) 
     if (trimmedAnswer === 'dragon') {
       // Correct answer
       setIsSuccess(true);
