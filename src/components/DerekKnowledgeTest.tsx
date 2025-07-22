@@ -5,6 +5,9 @@ import styles from '../styles/modules/DerekKnowledgeTest.module.css';
 const extendedStyles = styles as typeof styles & {
   bounce: string;
   spin: string;
+  celebrate: string;
+  success: string;
+  confetti: string;
 };
 
 const DerekKnowledgeTest: React.FC = () => {
@@ -14,6 +17,7 @@ const DerekKnowledgeTest: React.FC = () => {
   const [showMessage, setShowMessage] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
   const [derekAnimation, setDerekAnimation] = useState('');
+  const [isSuccess, setIsSuccess] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const incorrectMessages = [
@@ -27,17 +31,51 @@ const DerekKnowledgeTest: React.FC = () => {
     
     const trimmedAnswer = answer.trim().toLowerCase();
     
+    // Scroll Derek into view when answer is submitted
+    const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
+    if (derekImage) {
+      derekImage.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+      });
+    }
+    
     if (trimmedAnswer === 'dragon') {
       setMessage("You really know me, bro.");
       setShowMessage(false);
+      setIsSuccess(true);
+      setDerekAnimation(extendedStyles.celebrate);
+      
+      // Create confetti effect
+      const derekContainer = document.querySelector(`.${styles.derekContainer}`);
+      if (derekContainer) {
+        for (let i = 0; i < 20; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = extendedStyles.confetti;
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = ['#FFD700', '#FF6347', '#00CED1', '#FF1493', '#32CD32'][Math.floor(Math.random() * 5)];
+            confetti.style.width = Math.random() * 10 + 5 + 'px';
+            confetti.style.height = confetti.style.width;
+            derekContainer.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 2000);
+          }, i * 50);
+        }
+      }
       
       setTimeout(() => {
         setShowMessage(true);
       }, 500);
+      
+      setTimeout(() => {
+        setDerekAnimation('');
+      }, 2000);
     } else if (trimmedAnswer.includes(' ')) {
       setMessage("The format contains spaces. Try without spaces.");
       setShowMessage(false);
       setIsShaking(true);
+      setIsSuccess(false);
       
       setTimeout(() => {
         setShowMessage(true);
@@ -47,6 +85,7 @@ const DerekKnowledgeTest: React.FC = () => {
       setMessage("You think I'd pick a cat? Bro.");
       setShowMessage(false);
       setIsShaking(true);
+      setIsSuccess(false);
       
       setTimeout(() => {
         setShowMessage(true);
@@ -57,6 +96,7 @@ const DerekKnowledgeTest: React.FC = () => {
       setMessage(randomMessage);
       setShowMessage(false);
       setIsShaking(true);
+      setIsSuccess(false);
       
       setTimeout(() => {
         setShowMessage(true);
@@ -164,7 +204,7 @@ const DerekKnowledgeTest: React.FC = () => {
               }}
             />
             {showMessage && (
-              <div className={styles.speechBubble}>
+              <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''}`}>
                 <p>{message}</p>
               </div>
             )}
