@@ -1,12 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import styles from '../styles/modules/DerekKnowledgeTest.module.css';
 
+// Extend the styles type to include our new animation classes
+const extendedStyles = styles as typeof styles & {
+  bounce: string;
+  spin: string;
+};
+
 const DerekKnowledgeTest: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [answer, setAnswer] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [derekAnimation, setDerekAnimation] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
 
   const incorrectMessages = [
@@ -64,6 +71,41 @@ const DerekKnowledgeTest: React.FC = () => {
     }
   }, [isOpen]);
 
+  const handleDerekClick = () => {
+    const animations = [extendedStyles.bounce, extendedStyles.spin];
+    const animationDurations = [800, 1000]; // bounce, spin durations
+    const randomIndex = Math.floor(Math.random() * animations.length);
+    const randomAnimation = animations[randomIndex];
+    const animationDuration = animationDurations[randomIndex];
+    
+    const clickMessages = [
+      "Yo, that tickles!",
+      "Bro, I'm not a piñata!",
+      "Whoa, easy there!",
+      "Hey, I'm sensitive!",
+      "Dude, personal space!",
+      "Stop poking the dragon master!",
+      "I feel... tingly.",
+      "That's my good side!"
+    ];
+    
+    setDerekAnimation(randomAnimation);
+    
+    // Show a random message
+    const randomMessage = clickMessages[Math.floor(Math.random() * clickMessages.length)];
+    setMessage(randomMessage);
+    setShowMessage(false);
+    
+    setTimeout(() => {
+      setShowMessage(true);
+    }, 100);
+    
+    // Remove animation class after animation completes
+    setTimeout(() => {
+      setDerekAnimation('');
+    }, animationDuration);
+  };
+
   return (
     <div className={styles.container}>
       <button 
@@ -111,7 +153,15 @@ const DerekKnowledgeTest: React.FC = () => {
             <img 
               src="/derek.png" 
               alt="Derek" 
-              className={`${styles.derekImage} ${showMessage ? styles.pulse : ''}`}
+              className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
+              onClick={handleDerekClick}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleDerekClick();
+                }
+              }}
             />
             {showMessage && (
               <div className={styles.speechBubble}>
