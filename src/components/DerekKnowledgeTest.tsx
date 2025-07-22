@@ -33,16 +33,18 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
   const [showPasswordTooltip, setShowPasswordTooltip] = useState(false);
   const [messageFading, setMessageFading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const messageTimerRef = useRef<number | null>(null);
+  const fadeTimerRef = useRef<number | null>(null);
   
   // Check if quiz was already completed on mount
   useEffect(() => {
     const completed = localStorage.getItem('derekQuizCompleted') === 'true';
     if (completed) {
       setIsSuccess(true);
-      setMessage("You really know me, bro.");
       setIsOpen(true);
       setShowInput(true);
-      setShowMessage(true);
+      // Show the success message using the helper function
+      showDerekMessage("You really know me, bro.", 3000);
     }
   }, []);
 
@@ -51,6 +53,31 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
     "Try again, amateur.",
     "Think about it, dummy.",
   ];
+
+  // Helper function to show messages with proper cleanup
+  const showDerekMessage = (msg: string, duration: number = 2500) => {
+    // Clear any existing timers
+    if (messageTimerRef.current) {
+      clearTimeout(messageTimerRef.current);
+    }
+    if (fadeTimerRef.current) {
+      clearTimeout(fadeTimerRef.current);
+    }
+    
+    // Reset states
+    setMessageFading(false);
+    setMessage(msg);
+    setShowMessage(true);
+    
+    // Set hide timer
+    messageTimerRef.current = setTimeout(() => {
+      setMessageFading(true);
+      fadeTimerRef.current = setTimeout(() => {
+        setShowMessage(false);
+        setMessageFading(false);
+      }, 200);
+    }, duration);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,11 +89,14 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
     
     if (trimmedAnswer === 'dragon') {
       // Correct answer
-      setMessage("You really know me, bro.");
-      setShowMessage(false);
       setIsSuccess(true);
       setSuccessAnimating(true);
       setDerekAnimation(extendedStyles.celebrate);
+      
+      // Show success message after a short delay
+      setTimeout(() => {
+        showDerekMessage("You really know me, bro.", 3000);
+      }, 500);
       
       // Call the completion callback
       if (onQuizCompleted) {
@@ -106,10 +136,6 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
       }
       
       setTimeout(() => {
-        setShowMessage(true);
-      }, 500);
-      
-      setTimeout(() => {
         setDerekAnimation('');
       }, 2000);
     } else {
@@ -123,11 +149,15 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
         message = incorrectMessages[Math.floor(Math.random() * incorrectMessages.length)];
       }
       
-      setMessage(message);
-      setShowMessage(false);
       setIsShaking(true);
       setIsSuccess(false);
       setDerekAnimation((styles as any).wrongAnswer);
+      
+      // Show error message after shake animation starts
+      setTimeout(() => {
+        showDerekMessage(message, 2000);
+        setIsShaking(false);
+      }, 300);
       
       // Scroll to Derek for incorrect answer
       const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
@@ -137,11 +167,6 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
           block: 'center'
         });
       }
-      
-      setTimeout(() => {
-        setShowMessage(true);
-        setIsShaking(false);
-      }, 300);
       
       // Shorter animation for incorrect answers (0.5s)
       setTimeout(() => {
@@ -218,8 +243,7 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
   // Handle external messages
   useEffect(() => {
     if (externalMessage && isSuccess) {
-      setMessage(externalMessage);
-      setShowMessage(true);
+      showDerekMessage(externalMessage, 3000);
       
       // Add shake animation for all copy messages
       setDerekAnimation((styles as any).niceCopyShake);
@@ -228,17 +252,6 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
       setTimeout(() => {
         setDerekAnimation('');
       }, 600);
-      
-      // Hide message after 3 seconds
-      const timer = setTimeout(() => {
-        setMessageFading(true);
-        setTimeout(() => {
-          setShowMessage(false);
-          setMessageFading(false);
-        }, 200);
-      }, 3000);
-      
-      return () => clearTimeout(timer);
     }
   }, [externalMessage, isSuccess]);
 
@@ -274,12 +287,7 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
     
     // Show a random message
     const randomMessage = clickMessages[Math.floor(Math.random() * clickMessages.length)];
-    setMessage(randomMessage);
-    setShowMessage(false);
-    
-    setTimeout(() => {
-      setShowMessage(true);
-    }, 100);
+    showDerekMessage(randomMessage, 2000);
     
     // Remove animation class after animation completes
     setTimeout(() => {
@@ -354,8 +362,7 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
                           "Copy master right here"
                         ];
                         const randomMessage = copyMessages[Math.floor(Math.random() * copyMessages.length)];
-                        setMessage(randomMessage);
-                        setShowMessage(true);
+                        showDerekMessage(randomMessage, 2500);
                         
                         // Add shake animation
                         setDerekAnimation((styles as any).niceCopyShake);
@@ -375,14 +382,6 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
                         setTimeout(() => {
                           setShowPasswordTooltip(false);
                         }, 1500);
-                        
-                        setTimeout(() => {
-                          setMessageFading(true);
-                          setTimeout(() => {
-                            setShowMessage(false);
-                            setMessageFading(false);
-                          }, 200);
-                        }, 2500);
                       }
                     }}
                     aria-label="Copy password to clipboard"
