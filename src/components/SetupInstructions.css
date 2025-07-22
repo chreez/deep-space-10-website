@@ -42,7 +42,7 @@
 .card-grid {
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
 }
 
 .modern-card {
@@ -206,8 +206,190 @@
   font-weight: 600;
 }
 
+
+.install-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.install-step {
+  padding: 1.5rem;
+  background: rgba(11, 12, 16, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(199, 204, 214, 0.1);
+}
+
+.install-step h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--runestone-blue);
+  font-weight: 600;
+}
+
+.install-step p {
+  margin-bottom: 0.75rem;
+}
+
+.install-step .hint-box {
+  margin-top: 0.75rem;
+  background: rgba(216, 140, 61, 0.1);
+  border: 1px solid rgba(216, 140, 61, 0.2);
+}
+
+.directory-structure {
+  margin-top: 1rem;
+  padding: 1.5rem;
+  background: rgba(11, 12, 16, 0.7);
+  border-radius: 8px;
+  border: 1px solid rgba(199, 204, 214, 0.2);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.directory-header {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: var(--moonstone-steel);
+  font-style: italic;
+}
+
+.directory-tree {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.tree-item.indent {
+  padding-left: 2rem;
+  transition: all 0.3s ease;
+}
+
+.folder-icon {
+  font-size: 1.1rem;
+}
+
+.file-icon {
+  font-size: 1rem;
+  min-width: 1.5rem;
+  text-align: center;
+}
+
+.file-icon.existing {
+  opacity: 0.6;
+}
+
+.file-icon.modpack {
+  color: var(--runestone-blue);
+}
+
+.tree-item strong {
+  color: var(--runestone-blue);
+  font-weight: 600;
+}
+
+.tag {
+  font-size: 0.8rem;
+  color: var(--solar-flare-amber);
+  opacity: 0.8;
+  margin-left: 0.5rem;
+  font-style: italic;
+}
+
+.directory-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(199, 204, 214, 0.1);
+  display: flex;
+  gap: 2rem;
+  font-size: 0.85rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--moonstone-steel);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.legend-item:hover {
+  color: white;
+}
+
+.legend-item:hover .file-icon.existing ~ span {
+  color: white;
+}
+
+.legend-item:hover .file-icon.modpack ~ span {
+  color: var(--runestone-blue);
+}
+
+/* Glow effect for directory items */
+@keyframes subtle-glow {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 0px transparent);
+  }
+  50% {
+    filter: brightness(1.2) drop-shadow(0 0 8px rgba(75, 145, 226, 0.6));
+  }
+}
+
+/* Apply glow effect to highlighted items */
+.tree-item.highlight-effect {
+  animation: subtle-glow 2.5s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.tree-item.highlight-effect .file-icon {
+  filter: brightness(1.3);
+}
+
+.tree-item.highlight-effect strong {
+  text-shadow: 0 0 10px rgba(75, 145, 226, 0.5);
+}
+
+/* Hover effect on individual tree items */
+.tree-item.indent:hover {
+  background: rgba(75, 145, 226, 0.05);
+  border-radius: 4px;
+  margin-left: -4px;
+  padding-left: calc(2rem + 4px);
+  cursor: pointer;
+}
+
+/* Dim non-highlighted items when hovering */
+.directory-tree.has-hover .tree-item:not(.highlight-effect) {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+code {
+  background: rgba(75, 145, 226, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+}
+
 @media (max-width: 768px) {
-  .card-grid {
-    grid-template-columns: 1fr;
+  .directory-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .tree-item {
+    font-size: 0.85rem;
+  }
+  
+  .install-step {
+    padding: 1rem;
   }
 }

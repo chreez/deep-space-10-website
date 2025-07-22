@@ -3,6 +3,15 @@ import './SetupInstructions.css'
 
 function SetupInstructions() {
   const [showInstallHint, setShowInstallHint] = useState(false)
+  const [hoveredLegend, setHoveredLegend] = useState<'existing' | 'modpack' | null>(null)
+  const [hoveredItem, setHoveredItem] = useState<'existing' | 'modpack' | null>(null)
+  
+  const getHighlightClass = (itemType: 'existing' | 'modpack') => {
+    if (hoveredLegend === itemType || hoveredItem === itemType) {
+      return 'highlight-effect'
+    }
+    return ''
+  }
 
   return (
     <section className="section setup-section" id="setup-instructions">
@@ -32,22 +41,116 @@ function SetupInstructions() {
             </a>
           </div>
 
-          <div className="modern-card">
+          <div className="modern-card install-card" id="install-files">
             <div className="step-indicator">2</div>
             <h3>Install Files</h3>
-            <p>Drop the files into your Valheim directory.</p>
-            <button 
-              className="hover-hint" 
-              onClick={() => setShowInstallHint(!showInstallHint)}
-              aria-expanded={showInstallHint}
-            >
-              Where's my install folder
-            </button>
-            {showInstallHint && (
-              <div className="hint-box">
-                Right click Valheim in Steam → Manage → Browse local files
+            
+            <div className="install-steps">
+              <div className="install-step">
+                <h4>📁 Extract the Archive</h4>
+                <p>Extract <strong>deepspace10.rar</strong> using WinRAR, 7-Zip, or your preferred tool.</p>
+                <div className="hint-box">
+                  <strong>Tip:</strong> Right-click the .rar file → "Extract Here" or "Extract to deepspace10/"
+                </div>
               </div>
-            )}
+
+              <div className="install-step">
+                <h4>📂 Find Your Valheim Directory</h4>
+                <button 
+                  className="hover-hint" 
+                  onClick={() => setShowInstallHint(!showInstallHint)}
+                  aria-expanded={showInstallHint}
+                >
+                  Where's my install folder?
+                </button>
+                {showInstallHint && (
+                  <div className="hint-box">
+                    <strong>Steam:</strong> Right click Valheim → Manage → Browse local files<br/>
+                    <strong>Default location:</strong> <code>C:/Program Files (x86)/Steam/steamapps/common/Valheim</code>
+                  </div>
+                )}
+              </div>
+
+              <div className="install-step">
+                <h4>📋 Copy All Files</h4>
+                <p>Copy the <strong>entire contents</strong> of the extracted folder into your Valheim directory.</p>
+                <div className="directory-structure">
+                  <div className="directory-header">Your Valheim folder should look like this after installation:</div>
+                  <div className={`directory-tree ${hoveredLegend || hoveredItem ? 'has-hover' : ''}`}>
+                    <div className="tree-item">
+                      <span className="folder-icon">📁</span> Valheim/
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('existing')}`}
+                      onMouseEnter={() => setHoveredItem('existing')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon existing">✅</span> valheim_Data/
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('modpack')}`}
+                      onMouseEnter={() => setHoveredItem('modpack')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon modpack">📦</span> <strong>BepInEx/</strong> <span className="tag">← from modpack</span>
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('modpack')}`}
+                      onMouseEnter={() => setHoveredItem('modpack')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon modpack">📦</span> <strong>doorstop_libs/</strong> <span className="tag">← from modpack</span>
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('existing')}`}
+                      onMouseEnter={() => setHoveredItem('existing')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon existing">✅</span> valheim.exe
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('existing')}`}
+                      onMouseEnter={() => setHoveredItem('existing')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon existing">✅</span> UnityPlayer.dll
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('modpack')}`}
+                      onMouseEnter={() => setHoveredItem('modpack')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon modpack">📄</span> <strong>doorstop_config.ini</strong> <span className="tag">← from modpack</span>
+                    </div>
+                    <div 
+                      className={`tree-item indent ${getHighlightClass('modpack')}`}
+                      onMouseEnter={() => setHoveredItem('modpack')}
+                      onMouseLeave={() => setHoveredItem(null)}
+                    >
+                      <span className="file-icon modpack">📄</span> <strong>winhttp.dll</strong> <span className="tag">← from modpack</span>
+                    </div>
+                  </div>
+                  <div className="directory-footer">
+                    <div 
+                      className="legend-item legend-existing"
+                      onMouseEnter={() => setHoveredLegend('existing')}
+                      onMouseLeave={() => setHoveredLegend(null)}
+                    >
+                      <span className="file-icon existing">✅</span>
+                      <span>Existing game files</span>
+                    </div>
+                    <div 
+                      className="legend-item legend-modpack"
+                      onMouseEnter={() => setHoveredLegend('modpack')}
+                      onMouseLeave={() => setHoveredLegend(null)}
+                    >
+                      <span className="file-icon modpack">📦📄</span>
+                      <span>New modpack files</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="modern-card">

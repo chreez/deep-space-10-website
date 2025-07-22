@@ -281,10 +281,28 @@
   transition: all 0.3s ease;
   cursor: pointer;
   user-select: none;
+  animation: gentleSway 4s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+/* Gentle swaying animation for idle state */
+@keyframes gentleSway {
+  0%, 100% {
+    transform: rotate(-2deg) translateY(0px);
+  }
+  25% {
+    transform: rotate(1deg) translateY(-2px);
+  }
+  50% {
+    transform: rotate(2deg) translateY(0px);
+  }
+  75% {
+    transform: rotate(-1deg) translateY(-2px);
+  }
 }
 
 .derekEntry {
-  animation: derekEnters 1.2s ease-out;
+  animation: derekEnters 1.2s ease-out !important;
 }
 
 @keyframes derekEnters {
@@ -351,7 +369,7 @@
 }
 
 .derekImage.bounce {
-  animation: bounceAround 0.8s ease-out;
+  animation: bounceAround 0.8s ease-out !important;
 }
 
 @keyframes bounceAround {
@@ -369,7 +387,7 @@
 }
 
 .derekImage.spin {
-  animation: spinCrazy 1s ease-out;
+  animation: spinCrazy 1s ease-out !important;
 }
 
 @keyframes spinCrazy {
@@ -379,7 +397,7 @@
 }
 
 .derekImage.celebrate {
-  animation: celebration 2s ease-out;
+  animation: celebration 2s ease-out !important;
 }
 
 @keyframes celebration {
@@ -442,7 +460,7 @@
 }
 
 .derekImage.wrongAnswer {
-  animation: wrongShake 0.5s ease-out;
+  animation: wrongShake 0.5s ease-out !important;
 }
 
 @keyframes wrongShake {
@@ -493,7 +511,7 @@
 }
 
 .derekImage.pulse {
-  animation: runePulse 1s ease-out;
+  animation: runePulse 1s ease-out !important;
 }
 
 @keyframes runePulse {
@@ -633,7 +651,7 @@
 }
 
 .niceCopyShake {
-  animation: happyShake 0.6s ease-out;
+  animation: happyShake 0.6s ease-out !important;
 }
 
 @keyframes happyShake {
@@ -712,6 +730,79 @@
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+.nextStepContainer {
+  margin-top: 2rem;
+  text-align: center;
+  animation: fadeInSlide 0.6s ease-out;
+  animation-delay: 0.8s;
+  animation-fill-mode: both;
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.installGuideButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #4B91E2, #5aa3f0);
+  color: white;
+  border: none;
+  padding: 0.875rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 15px rgba(75, 145, 226, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.installGuideButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.installGuideButton:hover {
+  background: linear-gradient(135deg, #5aa3f0, #6bb4ff);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(75, 145, 226, 0.4);
+}
+
+.installGuideButton:hover::before {
+  left: 100%;
+}
+
+.installGuideButton:hover svg {
+  transform: translateX(3px);
+}
+
+.installGuideButton svg {
+  transition: transform 0.3s ease;
+}
+
+.installHint {
+  margin-top: 0.75rem;
+  color: #888;
+  font-size: 0.875rem;
+  font-style: italic;
 }
 
 /* Mobile responsiveness */

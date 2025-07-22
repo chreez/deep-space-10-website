@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { copyToClipboard } from '../utils/clipboard';
+import { scrollToInstallFiles } from '../utils/scroll';
 import styles from '../styles/modules/DerekKnowledgeTest.module.css';
 
 // Extend the styles type to include our new animation classes
@@ -11,6 +12,9 @@ const extendedStyles = styles as typeof styles & {
   confetti: string;
   wrongAnswer: string;
   successAnswer: string;
+  nextStepContainer: string;
+  installGuideButton: string;
+  installHint: string;
 };
 
 interface DerekKnowledgeTestProps {
@@ -438,26 +442,42 @@ const DerekKnowledgeTest: React.FC<DerekKnowledgeTestProps> = ({ onQuizCompleted
           )}
           
           {isSuccess && (
-            <div className={`${styles.derekContainer} ${successAnimating ? (styles as any).derekSlideDown : ''}`}>
-              <img 
-                src="/derek.png" 
-                alt="Derek" 
-                className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
-                onClick={handleDerekClick}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handleDerekClick();
-                  }
-                }}
-              />
-              {showMessage && (
-                <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''} ${messageFading ? (styles as any).hiding : ''}`}>
-                  <p>{message}</p>
-                </div>
-              )}
-            </div>
+            <>
+              <div className={`${styles.derekContainer} ${successAnimating ? (styles as any).derekSlideDown : ''}`}>
+                <img 
+                  src="/derek.png" 
+                  alt="Derek" 
+                  className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
+                  onClick={handleDerekClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleDerekClick();
+                    }
+                  }}
+                />
+                {showMessage && (
+                  <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''} ${messageFading ? (styles as any).hiding : ''}`}>
+                    <p>{message}</p>
+                  </div>
+                )}
+              </div>
+              
+              <div className={extendedStyles.nextStepContainer}>
+                <button 
+                  className={extendedStyles.installGuideButton}
+                  onClick={scrollToInstallFiles}
+                  aria-label="Scroll to installation instructions"
+                >
+                  <span>Next: Install the Mods</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </button>
+                <p className={extendedStyles.installHint}>Ready to join the server? Let's get those mods installed!</p>
+              </div>
+            </>
           )}
         </div>
       )}
