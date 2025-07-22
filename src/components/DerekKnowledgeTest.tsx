@@ -33,6 +33,9 @@ const DerekKnowledgeTest: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Don't submit if input is still animating
+    if (inputAnimating) return;
+    
     const trimmedAnswer = answer.trim().toLowerCase();
     
     if (trimmedAnswer === 'dragon') {
@@ -153,9 +156,18 @@ const DerekKnowledgeTest: React.FC = () => {
         // Make input interactable after its animation (0.4s)
         setTimeout(() => {
           setInputAnimating(false);
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
+          // Use requestAnimationFrame to ensure DOM updates are processed
+          requestAnimationFrame(() => {
+            if (inputRef.current) {
+              inputRef.current.focus();
+              // Force focus in case it didn't work
+              setTimeout(() => {
+                if (inputRef.current && document.activeElement !== inputRef.current) {
+                  inputRef.current.focus();
+                }
+              }, 50);
+            }
+          });
         }, 400);
       }, 1200);
       
@@ -279,7 +291,7 @@ const DerekKnowledgeTest: React.FC = () => {
                     className={`${styles.input} ${isShaking ? styles.shake : ''} ${inputAnimating ? (styles as any).inputEntry : ''}`}
                     placeholder="Enter your guess..."
                     aria-describedby="derek-hint"
-                    disabled={inputAnimating}
+                    readOnly={inputAnimating}
                     onBlur={(e) => {
                       // Refocus immediately if input loses focus
                       if (!isSuccess && !inputAnimating) {
