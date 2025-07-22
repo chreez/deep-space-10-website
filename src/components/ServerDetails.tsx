@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { copyToClipboard } from '../utils/clipboard'
+import DerekKnowledgeTest from './DerekKnowledgeTest'
 import './ServerDetails.css'
 
 function ServerDetails() {
@@ -53,6 +54,8 @@ function ServerDetails() {
             <div className="ip-label">Password Hint</div>
             <p>Derek's favorite animal</p>
           </div>
+          
+          <DerekKnowledgeTest />
         </div>
       </div>
     </section>
