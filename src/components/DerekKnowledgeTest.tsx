@@ -159,6 +159,27 @@ const DerekKnowledgeTest: React.FC = () => {
       
       {isOpen && (
         <div id="derek-form" className={styles.formContainer}>
+
+          <div className={styles.derekContainer}>
+            <img 
+              src="/derek.png" 
+              alt="Derek" 
+              className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
+              onClick={handleDerekClick}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  handleDerekClick();
+                }
+              }}
+            />
+            {showMessage && (
+              <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''}`}>
+                <p>{message}</p>
+              </div>
+            )}
+          </div>
           <form onSubmit={handleSubmit} className={styles.form}>
             <div className={styles.inputGroup}>
               <label htmlFor="derek-answer" className={styles.label}>
@@ -189,26 +210,6 @@ const DerekKnowledgeTest: React.FC = () => {
             </div>
           </form>
           
-          <div className={styles.derekContainer}>
-            <img 
-              src="/derek.png" 
-              alt="Derek" 
-              className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
-              onClick={handleDerekClick}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  handleDerekClick();
-                }
-              }}
-            />
-            {showMessage && (
-              <div className={`${styles.speechBubble} ${isSuccess ? extendedStyles.success : ''}`}>
-                <p>{message}</p>
-              </div>
-            )}
-          </div>
         </div>
       )}
     </div>
