@@ -8,6 +8,8 @@ const extendedStyles = styles as typeof styles & {
   celebrate: string;
   success: string;
   confetti: string;
+  wrongAnswer: string;
+  successAnswer: string;
 };
 
 const DerekKnowledgeTest: React.FC = () => {
@@ -18,12 +20,14 @@ const DerekKnowledgeTest: React.FC = () => {
   const [isShaking, setIsShaking] = useState(false);
   const [derekAnimation, setDerekAnimation] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [showInput, setShowInput] = useState(false);
+  const [inputAnimating, setInputAnimating] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const incorrectMessages = [
     "That's not my spirit animal, man.",
     "Try again, amateur.",
-    "C'mon, I wore that shirt *every day*.",
+    "Think about it, dummy.",
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -31,20 +35,21 @@ const DerekKnowledgeTest: React.FC = () => {
     
     const trimmedAnswer = answer.trim().toLowerCase();
     
-    // Scroll Derek into view when answer is submitted
-    const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
-    if (derekImage) {
-      derekImage.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center'
-      });
-    }
-    
     if (trimmedAnswer === 'dragon') {
+      // Correct answer
       setMessage("You really know me, bro.");
       setShowMessage(false);
       setIsSuccess(true);
       setDerekAnimation(extendedStyles.celebrate);
+      
+      // Scroll to Derek image for correct answer
+      const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
+      if (derekImage) {
+        derekImage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
       
       // Create confetti effect
       const derekContainer = document.querySelector(`.${styles.derekContainer}`);
@@ -71,45 +76,108 @@ const DerekKnowledgeTest: React.FC = () => {
       setTimeout(() => {
         setDerekAnimation('');
       }, 2000);
-    } else if (trimmedAnswer.includes(' ')) {
-      setMessage("The format contains spaces. Try without spaces.");
-      setShowMessage(false);
-      setIsShaking(true);
-      setIsSuccess(false);
-      
-      setTimeout(() => {
-        setShowMessage(true);
-        setIsShaking(false);
-      }, 300);
-    } else if (trimmedAnswer === 'cat' || trimmedAnswer === 'cats') {
-      setMessage("You think I'd pick a cat? Bro.");
-      setShowMessage(false);
-      setIsShaking(true);
-      setIsSuccess(false);
-      
-      setTimeout(() => {
-        setShowMessage(true);
-        setIsShaking(false);
-      }, 300);
     } else {
-      const randomMessage = incorrectMessages[Math.floor(Math.random() * incorrectMessages.length)];
-      setMessage(randomMessage);
+      // Incorrect answer
+      let message = '';
+      if (trimmedAnswer.includes(' ')) {
+        message = "The format contains spaces. Try without spaces.";
+      } else if (trimmedAnswer === 'cat' || trimmedAnswer === 'cats') {
+        message = "You think I'd pick a cat? Bro.";
+      } else {
+        message = incorrectMessages[Math.floor(Math.random() * incorrectMessages.length)];
+      }
+      
+      setMessage(message);
       setShowMessage(false);
       setIsShaking(true);
       setIsSuccess(false);
+      setDerekAnimation((styles as any).wrongAnswer);
+      
+      // Scroll to Derek for incorrect answer
+      const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
+      if (derekImage) {
+        derekImage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
       
       setTimeout(() => {
         setShowMessage(true);
         setIsShaking(false);
       }, 300);
+      
+      // Shorter animation for incorrect answers (0.5s)
+      setTimeout(() => {
+        setDerekAnimation('');
+        setAnswer(''); // Clear the input field
+        
+        // Focus back on input after animation
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }, 500);
     }
   };
 
   useEffect(() => {
-    if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+    if (isOpen) {
+      // Immediate scroll to Derek when form opens
+      const derekImage = document.querySelector(`.${styles.derekImage}`) as HTMLElement;
+      if (derekImage) {
+        derekImage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+      }
+      
+      // Scroll again halfway through Derek's animation (0.6s)
+      const scrollTimer = setTimeout(() => {
+        if (derekImage) {
+          derekImage.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+        }
+      }, 600);
+      
+      // Show input after Derek's entry animation (1.2s)
+      const inputTimer = setTimeout(() => {
+        setShowInput(true);
+        setInputAnimating(true);
+        
+        // Make input interactable after its animation (0.4s)
+        setTimeout(() => {
+          setInputAnimating(false);
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }, 400);
+      }, 1200);
+      
+      return () => {
+        clearTimeout(scrollTimer);
+        clearTimeout(inputTimer);
+      };
+    } else {
+      setShowInput(false);
+      setInputAnimating(false);
     }
   }, [isOpen]);
+
+  // Maintain focus on input whenever component updates
+  useEffect(() => {
+    if (showInput && !inputAnimating && !isSuccess && inputRef.current) {
+      const currentActive = document.activeElement;
+      if (currentActive !== inputRef.current) {
+        inputRef.current.focus();
+      }
+    }
+  });
 
   const handleDerekClick = () => {
     const animations = [extendedStyles.bounce, extendedStyles.spin];
@@ -143,6 +211,10 @@ const DerekKnowledgeTest: React.FC = () => {
     // Remove animation class after animation completes
     setTimeout(() => {
       setDerekAnimation('');
+      // Ensure input maintains focus after Derek animation
+      if (!isSuccess && inputRef.current) {
+        inputRef.current.focus();
+      }
     }, animationDuration);
   };
 
@@ -164,7 +236,7 @@ const DerekKnowledgeTest: React.FC = () => {
             <img 
               src="/derek.png" 
               alt="Derek" 
-              className={`${styles.derekImage} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
+              className={`${styles.derekImage} ${(styles as any).derekEntry} ${showMessage && !derekAnimation ? styles.pulse : ''} ${derekAnimation}`}
               onClick={handleDerekClick}
               role="button"
               tabIndex={0}
@@ -180,35 +252,57 @@ const DerekKnowledgeTest: React.FC = () => {
               </div>
             )}
           </div>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <label htmlFor="derek-answer" className={styles.label}>
-                What's Derek's favorite animal?
-              </label>
-              <input
-                ref={(el) => {
-                  inputRef.current = el;
-                  // Scroll into view when the input is rendered
-                  if (el) {
-                    el.scrollIntoView({
-                      behavior: 'smooth',
-                      block: 'center'
-                    });
-                  }
-                }}
-                id="derek-answer"
-                type="text"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                className={`${styles.input} ${isShaking ? styles.shake : ''}`}
-                placeholder="Enter your guess..."
-                aria-describedby="derek-hint"
-              />
-              <p id="derek-hint" className={styles.hint}>
-                Hint: Think mythical and powerful... Press Enter to submit.
-              </p>
-            </div>
-          </form>
+          {showInput && (
+            <form onSubmit={handleSubmit} className={`${styles.form} ${(styles as any).formEntry}`}>
+              <div className={styles.inputGroup}>
+                <label htmlFor="derek-answer" className={styles.label}>
+                  What's Derek's favorite animal?
+                </label>
+                {isSuccess ? (
+                  <span className={(styles as any).successAnswer}>dragon</span>
+                ) : (
+                  <input
+                    ref={(el) => {
+                      inputRef.current = el;
+                      // Scroll into view when the input is rendered
+                      if (el && !inputAnimating) {
+                        el.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'center'
+                        });
+                      }
+                    }}
+                    id="derek-answer"
+                    type="text"
+                    value={answer}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    className={`${styles.input} ${isShaking ? styles.shake : ''} ${inputAnimating ? (styles as any).inputEntry : ''}`}
+                    placeholder="Enter your guess..."
+                    aria-describedby="derek-hint"
+                    disabled={inputAnimating}
+                    onBlur={(e) => {
+                      // Refocus immediately if input loses focus
+                      if (!isSuccess && !inputAnimating) {
+                        e.target.focus();
+                      }
+                    }}
+                  />
+                )}
+                <p id="derek-hint" className={styles.hint}>
+                  Hint: Think mythical and powerful...
+                </p>
+              </div>
+              {!isSuccess && (
+                <button
+                  type="submit"
+                  className={styles.submitButton}
+                  disabled={inputAnimating}
+                >
+                  Submit Answer
+                </button>
+              )}
+            </form>
+          )}
           
         </div>
       )}

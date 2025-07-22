@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- heading "DS-10 DS-10" [level=1]
+- paragraph: Connect your longship to the starforge.
+- button "Scroll to server connection details":
+  - text: Server Details
+  - img
+- button "Scroll to setup instructions":
+  - text: Quick Start
+  - img
+- main:
+  - heading "Quick Setup" [level=2]
+  - paragraph: ⚠️ First launch will take a moment. Hang tight, Viking! 🪓
+  - text: "1"
+  - heading "Download Modpack" [level=3]
+  - paragraph: Get the required mods from our GitHub repository.
+  - paragraph:
+    - text: Click on
+    - strong: deepspace10.rar
+    - text: to download
+  - link "Download deepspace10.rar modpack from GitHub (opens in new tab)":
+    - /url: https://github.com/chreez/deep-space-10-valheim/releases
+    - img
+    - text: Download Modpack
+  - text: "2"
+  - heading "Install Files" [level=3]
+  - paragraph: Drop the files into your Valheim directory.
+  - button "Where's my install folder ?"
+  - text: "3"
+  - heading "Launch Game" [level=3]
+  - paragraph: Start Valheim normally through Steam. The mods will load automatically.
+  - img
+  - text: A second window labeled
+  - strong: "'BepInEx'"
+  - text: should launch, confirming successful mod installation
+  - heading "Server Details" [level=2]
+  - text: Server Address
+  - button "Copy server IP address to clipboard": 95.173.217.154:2456 Copied to clipboard! 📋
+  - text: Password Hint
+  - paragraph: Derek's favorite animal
+  - button "Test Your Derek Knowledge 🧠"
+```
