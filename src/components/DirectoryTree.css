@@ -1,0 +1,72 @@
+.file-tree-container {
+  position: relative;
+  font-family: "JetBrains Mono", monospace;
+  background: var(--meteor-gray);
+  padding: 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+}
+
+.file-tree {
+  margin: 0;
+  white-space: pre;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  background: var(--runestone-blue);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.file-tree span {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.modpack:hover span {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.modpack {
+  font-weight: bold;
+  color: var(--runestone-blue);
+  position: relative;
+}
+
+.modpack-file {
+  color: var(--solar-flare-amber);
+}
+
+.tooltip {
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(0, -50%);
+  background: var(--meteor-gray);
+  color: var(--moonstone-steel);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  margin-left: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.modpack:hover .tooltip {
+  opacity: 1;
+}
+
+.existing {
+  color: var(--moonstone-steel);
+}
