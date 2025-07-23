@@ -1,0 +1,87 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  margin-top: 1rem;
+}
+
+.copyButton {
+  position: absolute;
+  right: 0.5rem;
+  top: -2rem;
+  background: var(--runestone-blue);
+  color: white;
+  border: none;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.copyButton:hover {
+  background: var(--solar-flare-amber);
+}
+
+.copied {
+  background: var(--solar-flare-amber);
+}
+
+.tree {
+  font-family: 'JetBrains Mono', monospace;
+  background: rgba(31, 31, 35, 0.6);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid rgba(199, 204, 214, 0.1);
+  color: var(--moonstone-steel);
+  overflow-x: auto;
+}
+
+.line {
+  display: block;
+  white-space: pre;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.existing {
+  color: #aaaaaa;
+}
+
+.modpackFolder {
+  font-weight: 700;
+  color: var(--runestone-blue);
+}
+
+.modpackFile {
+  color: var(--solar-flare-amber);
+}
+
+.line[data-tooltip]:hover {
+  transform: scale(1.02);
+}
+
+.line[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  transform: translate(0, -50%) scale(0.8);
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  opacity: 0;
+  white-space: nowrap;
+  transition: opacity 0.2s, transform 0.2s;
+  margin-left: 0.5rem;
+  pointer-events: none;
+}
+
+.line[data-tooltip]:hover::after {
+  opacity: 1;
+  transform: translate(0, -50%) scale(1);
+}
+
+.root {
+  font-weight: 700;
+}
